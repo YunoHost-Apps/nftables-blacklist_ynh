@@ -1,15 +1,15 @@
 [Unit]
-Description=nftables IP blacklist
-After=network.target
+Description=Update nftables IP blacklist
+After=network-online.target
+Wants=network-online.target
 
 [Service]
 Type=oneshot
 User=__APP__
 WorkingDirectory=__INSTALL_DIR__/
-ExecStart=/usr/bin/sudo /usr/bin/bash __INSTALL_DIR__/update-blacklist.sh __INSTALL_DIR__/nftables-blacklist.conf
+ExecStart=/usr/bin/bash __INSTALL_DIR__/update-blacklist.sh --cron __INSTALL_DIR__/nftables-blacklist.conf
 StandardOutput=append:/var/log/__APP__/__APP__.log
 StandardError=inherit
-RemainAfterExit=yes
 
 # Sandboxing options to harden security
 # Details for these options: https://www.freedesktop.org/software/systemd/man/systemd.exec.html
@@ -45,6 +45,3 @@ CapabilityBoundingSet=~CAP_MAC_ADMIN CAP_MAC_OVERRIDE
 # CAP_NET_ADMIN CAP_NET_RAW are needed
 CapabilityBoundingSet=~CAP_NET_BROADCAST
 CapabilityBoundingSet=~CAP_SYS_ADMIN CAP_SYS_PTRACE CAP_SYSLOG
-
-[Install]
-WantedBy=multi-user.target

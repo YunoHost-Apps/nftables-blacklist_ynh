@@ -1,12 +1,4 @@
 #!/bin/bash
-# In simple cases, you don't need a config script.
-
-# With a simple config_panel.toml, you can write in the app settings, in the
-# upstream config file or replace complete files (logo ...) and restart services.
-
-# The config scripts allows you to go further, to handle specific cases
-# (validation of several interdependent fields, specific getter/setter for a value,
-# display dynamic informations or choices, pre-loading of config type .cube... ).
 
 #=================================================
 # IMPORT GENERIC HELPERS
@@ -23,74 +15,74 @@ ynh_abort_if_errors
 install_dir=$(ynh_app_setting_get --key=install_dir)
 
 #=================================================
-# SPECIFIC GETTERS FOR TOML SHORT KEY
+# DEFAULTS
 #=================================================
 
-get__amount() {
-    # Here we can imagine to have an API call to stripe to know the amount of donation during a month
-    local amount=200
+if [ "$use_default_blocklists" = "yes" ]; then
+    # Taken from https://github.com/trick77/nftables-blacklist/blob/master/nftables-blacklist.conf#L30-L59
+    default_list='"https://www.projecthoneypot.org/list_of_ips.php?t=d&rss=1" "http://danger.rulez.sk/projects/bruteforceblocker/blist.php" "https://www.spamhaus.org/drop/drop_v4.json" "https://www.spamhaus.org/drop/drop_v6.json" "https://cinsscore.com/list/ci-badguys.txt" "https://lists.blocklist.de/lists/all.txt" "https://blocklist.greensnow.co/greensnow.txt"  "https://iplists.firehol.org/files/firehol_level1.netset" "https://iplists.firehol.org/files/stopforumspam_7d.ipset" "https://rules.emergingthreats.net/blockrules/compromised-ips.txt"'
+else
+    default_list=''
+fi
 
-    # It's possible to change some properties of the question by overriding it:
-    if [ "$amount" -gt 100 ]; then
-    cat << EOF
-style: success
-value: $amount
-ask:
-  en: A lot of donation this month: **$amount €**
-EOF
-    else
-    cat << EOF
-style: danger
-value: $amount
-ask:
-  en: Not so much donation this month: $amount €
-EOF
+# Unfortunately YunoHost relies on external infrastructure
+# Blocking some AS can pretty much prevent updates and app installations.
+# The AS are found thanks to https://lens.ipverse.net/
+yunohost_protected_asn=(
+    # Google ASN hosts the Go language
+    15169
+    # GitHub hosts all YunoHost apps
+    36459
+)
+
+#=================================================
+# HANDLING THE VARIABLES
+#=================================================
+
+# Convert the comma-separated list of tags into arrays
+IFS=',' read -r -a countries_array  <<< "${countries:=}"
+IFS=',' read -r -a asn_array        <<< "${asn:=}"
+IFS=',' read -r -a ips_array        <<< "${ips:=}"
+
+# Initialize the lists that will be put in the configuration file
+countries_list=""
+asn_list=""
+ips_list=""
+
+# For each country code, we append the IPv4 and IPv6 list URLs
+for country in "${countries_array[@]}"; do
+    # let's force lower case country codes
+    cc=$(printf '%s' "$country" | tr '[:upper:]' '[:lower:]')
+
+    countries_list+=" \"https://raw.githubusercontent.com/ipverse/country-ip-blocks/master/country/${cc}/ipv4-aggregated.txt\" \"https://raw.githubusercontent.com/ipverse/country-ip-blocks/master/country/${cc}/ipv6-aggregated.txt\""
+done
+
+# For each AS, we add the IPv4 and IPv6 lists...
+for as in "${asn_array[@]}"; do
+    # ...but before that we check that the AS is not in the list of protected AS
+    # the Bash expansion black magic returns _found_ if the AS is found in the array, nothing if not found
+    # the -z test makes sure we proceed if nothing is found
+    if [[ -z ${yunohost_protected_asn[$as]+_found_} ]]; then
+        asn_list+=" \"https://raw.githubusercontent.com/ipverse/as-ip-blocks/master/as/${as}/ipv4-aggregated.txt\" \"https://raw.githubusercontent.com/ipverse/as-ip-blocks/master/as/${as}/ipv6-aggregated.txt\""
     fi
-}
+done
 
-get__prices() {
-    local prices
-    prices="$(grep "DONATION\['" "$install_dir/settings.py" | sed -r "s@^DONATION\['([^']*)'\]\['([^']*)'\] = '([^']*)'@\1/\2/\3@g" | sed -z 's/\n/,/g;s/,$/\n/')"
-    if [ "$prices" == "," ]; then
-        # Return YNH_NULL if you prefer to not return a value at all.
-        echo YNH_NULL
-    else
-        echo "$prices"
-    fi
-}
+# We surround each IP with double quotes
+for ip in "${ips_array[@]}"; do
+    ips_list+=" \"${ip}\""
+done
 
-#=================================================
-# SPECIFIC VALIDATORS FOR TOML SHORT KEYS
-#=================================================
-validate__publishable_key() {
+ynh_app_setting_set --key=countries --value="${countries}"
+ynh_app_setting_set --key=asn       --value="${asn}"
+ynh_app_setting_set --key=ips       --value="${ips}"
 
-    # We can imagine here we test if the key is really a publishable key
-    (is_secret_key "$publishable_key") &&
-        echo 'This key seems to be a secret key'
-}
+ynh_config_add --template="nftables-blacklist.conf" --destination="$install_dir/nftables-blacklist.conf"
 
-#=================================================
-# SPECIFIC SETTERS FOR TOML SHORT KEYS
-#=================================================
-set__prices() {
+# Make sure the custom files exist
+touch "$install_dir/custom_allowlist.txt"
+touch "$install_dir/custom_blocklist.txt"
 
-    #---------------------------------------------
-    # IMPORTANT: setters are triggered only if a change is detected
-    #---------------------------------------------
-    for price in $(echo "$prices" | sed "s/,/ /"); do
-        frequency=$(echo "$price" | cut -d/ -f1)
-        currency=$(echo "$price" | cut -d/ -f2)
-        price_id=$(echo "$price" | cut -d/ -f3)
-        sed "d/DONATION\['$frequency'\]\['$currency'\]" "$install_dir/settings.py"
-
-        echo "DONATION['$frequency']['$currency'] = '$price_id'" >> "$install_dir/settings.py"
-    done
-
-    #---------------------------------------------
-    # IMPORTANT: to be able to upgrade properly, you have to save the value in settings too
-    #---------------------------------------------
-    ynh_app_setting_set --key=prices --value="$prices"
-}
+ynh_systemctl --service="$app" --action="start"
 
 #=================================================
 ynh_app_config_run "$1"
