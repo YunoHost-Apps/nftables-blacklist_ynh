@@ -1,0 +1,2 @@
+__APP__ ALL=(root) NOPASSWD: /usr/bin/bash __INSTALL_DIR__/update-blacklist.sh __INSTALL_DIR__/nftables-blacklist.conf
+__APP__ ALL=(root) NOPASSWD: /usr/bin/bash __INSTALL_DIR__/update-blacklist.sh --cron __INSTALL_DIR__/nftables-blacklist.conf

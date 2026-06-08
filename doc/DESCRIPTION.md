@@ -1,1 +1,1 @@
-This is a dummy description of this app features
+nftables-blacklist is a script that downloads IP addresses blocklists to configure your server's firewall with them. This YunoHost package offers a configuration panel to easily configure it with country codes, Autonomous System Numbers, and allowlists.

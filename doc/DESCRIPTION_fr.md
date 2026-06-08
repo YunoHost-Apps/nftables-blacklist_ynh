@@ -1,1 +1,1 @@
-Ceci est une fausse description des fonctionalités de l'app
+nftables-blacklist est un script qui télécharge des listes de blocage d'adresses IP pour configurer le pare-feu de votre serveur. Ce package YunoHost offre un panneau de configuration pour le configurer aisément avec des codes de pays, des numéros de Systèmes Autonomes (ASN), et des listes d'autorisation.

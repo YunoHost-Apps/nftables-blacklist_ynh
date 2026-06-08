@@ -1,0 +1,91 @@
+#:schema https://github.com/YunoHost/apps/raw/main/schemas/config_panel.v1.schema.json
+
+version = "1.0"
+
+[main]
+
+name.en = "Configuration"
+name.fr = "Configuration"
+services = ["__APP__"]
+
+    [main.blocklist]
+
+        name.en = "Blocklists"
+        name.fr = "Listes de blocage"
+
+        [main.general.block_forward]
+        ask.en = "Should listed IPs be blocked in the forward chain (e.g. to containers) as well?"
+        ask.fr = "Bloquer aussi les IP de la liste d'exclusion dans la chaîne *forward* (par exemple vers les conteneurs) ?"
+        type = "boolean"
+        yes = "yes"
+        no = "no"
+
+        [main.blocklist.use_default_blocklists]
+        ask.en = "Include default blocklists?"
+        ask.fr = "Inclure les listes de blocage par défaut ?"
+        help.en = "Recommended. You can find the list in <a href='https://github.com/trick77/nftables-blacklist/blob/master/nftables-blacklist.conf#L30-L59' target='_blank'>the default configuration file of the upstream code repository</a>."
+        help.fr = "Recommandé. Vous pouvez trouver la liste dans <a href='https://github.com/trick77/nftables-blacklist/blob/master/nftables-blacklist.conf#L30-L59' target='_blank'>la configuration par défaut du dépôt de code amont</a>."
+        type = "boolean"
+        yes = "yes"
+        no = "no"
+
+        [main.blocklist.countries]
+        ask.en = "List of countries to block"
+        ask.fr = "Liste des pays à bloquer"
+        help.en = "Use the <a href='https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2#Officially_assigned_code_elements' target='_blank'>ISO 3166-1 alpha-2 codes</a> in lowercase."
+        help.fr = "Utilisez les codes <a href='https://fr.wikipedia.org/wiki/ISO_3166-1_alpha-2' target='_blank'>ISO 3166-1 alpha-2</a> en minuscule."
+        type = "tags"
+        example = "cx,tf,um"
+        pattern.regexp = '^(?:[a-z]{2})(?:\s*,\s*[a-z]{2})*$'
+        pattern.error = "It should be a list of 2-character lowercase codes."
+
+        [main.blocklist.blocklist_warning]
+        type = "alert"
+        style = "info"
+        ask.en = "It might be tempting to block all Big Tech ASNs. However, bear in mind this might break YunoHost or its app installations, as they rely on some of them, e.g. Google for the Go programming language, or GitHub for the app repositories. These have already been allowlisted, but feel free to drop a message to the maintainers to update the allowlist if you find more."
+        ask.fr = "Il pourrait être tentant de bloquer tous les ASN des géants de la tech. Cependant, gardez à l'esprit que cela pourrait perturber le fonctionnement de YunoHost ou l'installation de ses applications, car celles-ci dépendent de certains d'entre eux, par exemple Google pour le langage de programmation Go, ou GitHub pour les dépôts d'applications. Ces derniers ont déjà été ajoutés à la liste d'autorisation, mais n'hésitez pas à envoyer un message aux personnes maintenant l'app pour mettre à jour cette liste si vous en trouvez d'autres."
+
+        [main.blocklist.asn]
+        ask.en = "List of ASN to block"
+        ask.fr = "Liste des ASN à bloquer"
+        help.en = "Use only the numbers, without the \"AS\" prefix. Refer to <a href='https://lens.ipverse.net/' target='_blank'>Lens</a> to explore AS."
+        help.fr = "N'utilisez que les numéros, sans le préfixe \"AS\". Référez-vous à <a href='https://lens.ipverse.net/' target='_blank'>Lens</a> pour explorer les AS."
+        type = "tags"
+        example = "32934,54115,63293"
+        pattern.regexp = '^(?:[0-9]+)(?:\s*,\s*[0-9]+)*$'
+        pattern.error = "It should be a list of numbers."
+
+        [main.blocklist.blocklist_file]
+        ask.en = "Upload your own file"
+        ask.fr = "Chargez votre propre fichier"
+        type = "file"
+        help.en = "The text file should contain a list of IP addresses. One per line."
+        help.fr = "Le fichier texte devrait contenir une liste d'adresses IP. Une par ligne."
+        bind = "__INSTALL_DIR__/custom_blocklist.txt"
+
+    [main.allowlist]
+
+    name.en = "Allowlist"
+    name.fr = "Liste d'autorisation"
+
+        [main.allowlist.allowlist_warning]
+        type = "alert"
+        style = "info"
+        ask.en = "Your server's own IP address and local IP addresses are always automatically added to the allowlist."
+        ask.fr = "L'adresse IP de votre serveur et les adresses IP locales sont toujours automatiquement ajoutées à la liste d'autorisation."
+
+        [main.allowlist.ips]
+        ask.en = "List of IPs to allow"
+        ask.fr = "Liste des adresses IP à autoriser"
+        help.en = "IPv4 supports CIDR format, not IPv6. URL can be added too, as long as the files they point to has the same format as the one described in the next question."
+        help.fr = "L'IPv4 supporte le format CIDR, pas l'IPv6. Des URL peuvent être ajoutées, tant que les fichiers vers lesquels elles pointent ont le même format que celui décrit dans la question suivante."
+        type = "tags"
+        example = "203.0.113.10, 203.0.113.0/24, 2001:db8::1"
+
+        [main.allowlist.allowlist_file]
+        ask.en = "Upload your own file"
+        ask.fr = "Chargez votre propre fichier"
+        type = "file"
+        help.en = "The text file should contain a list of IP addresses. One per line. IPv4 supports CIDR format, not IPv6."
+        help.fr = "Le fichier texte devrait contenir une liste d'adresses IP. Une par ligne. L'IPv4 supporte le format CIDR, pas l'IPv6."
+        bind = "__INSTALL_DIR__/custom_allowlist.txt"
