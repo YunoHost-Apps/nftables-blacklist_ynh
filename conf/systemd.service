@@ -16,7 +16,7 @@ RemainAfterExit=yes
 # Sudo needs new privileges
 NoNewPrivileges=no
 PrivateTmp=yes
-PrivateDevices=yes
+PrivateDevices=no
 #RestrictAddressFamilies=AF_UNIX AF_INET AF_INET6 AF_NETLINK
 #RestrictNamespaces=yes
 #RestrictRealtime=yes
