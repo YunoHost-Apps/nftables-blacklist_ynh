@@ -7,7 +7,7 @@ name = "nftables blacklist"
 description.en = "A script to ban large numbers of IP addresses published in blocklists, associated with countries or Autonomous Systems (AS)"
 description.fr = "Un script pour bannir de grands nombres d'adresses IP publiées dans des listes de blocage, associées à des pays ou des Systèmes Autonomes (AS)"
 
-version = "2026.05.09~ynh1"
+version = "2026.05.09~ynh2"
 
 maintainers = ["tituspijean"]
 
