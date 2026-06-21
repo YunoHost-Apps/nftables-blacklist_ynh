@@ -28,6 +28,8 @@ systemctl daemon-reload
 
 ynh_config_add_logrotate
 
+nft delete table inet blacklist
+
 #=================================================
 # END OF SCRIPT
 #=================================================
