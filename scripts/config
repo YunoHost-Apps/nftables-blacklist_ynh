@@ -18,7 +18,7 @@ install_dir=$(ynh_app_setting_get --key=install_dir)
 # DEFAULTS
 #=================================================
 
-if [ "$use_default_blocklists" = "yes" ]; then
+if [ "$use_default_blocklists" = true ]; then
     # Taken from https://github.com/trick77/nftables-blacklist/blob/master/nftables-blacklist.conf#L30-L59
     default_list='"https://www.projecthoneypot.org/list_of_ips.php?t=d&rss=1" "http://danger.rulez.sk/projects/bruteforceblocker/blist.php" "https://www.spamhaus.org/drop/drop_v4.json" "https://www.spamhaus.org/drop/drop_v6.json" "https://cinsscore.com/list/ci-badguys.txt" "https://lists.blocklist.de/lists/all.txt" "https://blocklist.greensnow.co/greensnow.txt"  "https://iplists.firehol.org/files/firehol_level1.netset" "https://iplists.firehol.org/files/stopforumspam_7d.ipset" "https://rules.emergingthreats.net/blockrules/compromised-ips.txt"'
 else
