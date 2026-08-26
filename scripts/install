@@ -41,6 +41,8 @@ chown "$app:$app" "$install_dir/nftables-blacklist.conf"
 
 echo "# Add custom allow listed IPs below" > "$install_dir/custom_allowlist.txt"
 echo "# Add custom block listed IPs below" > "$install_dir/custom_blocklist.txt"
+chown "$app:$app" "$install_dir/custom_allowlist.txt"
+chown "$app:$app" "$install_dir/custom_blocklist.txt"
 
 mkdir -p "/var/log/$app"
 chown "$app:$app" -R "/var/log/$app"
