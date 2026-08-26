@@ -46,8 +46,16 @@ chmod 500 "$install_dir/update-blacklist.sh"
 chmod 600 "$install_dir/nftables-blacklist.conf"
 chown "$app:$app" "$install_dir/nftables-blacklist.conf"
 
-touch "$install_dir/custom_allowlist.txt"
-touch "$install_dir/custom_blocklist.txt"
+if [[ ! -s "$install_dir/custom_allowlist.txt" ]]; then
+    ynh_script_progression "Fixing up allow list..."
+    echo "# Add custom allow listed IPs below" > "$install_dir/custom_allowlist.txt"
+fi
+
+if [[ ! -s "$install_dir/custom_blocklist.txt" ]]; then
+    ynh_script_progression "Fixing up block list..."
+    echo "# Add custom block listed IPs below" > "$install_dir/custom_blocklist.txt"
+fi
+
 
 ynh_config_add --template="sudoers" --destination="/etc/sudoers.d/$app"
 
