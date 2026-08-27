@@ -73,8 +73,6 @@ ynh_script_progression "Starting $app's systemd service..."
 
 ynh_systemctl --service="$app" --action="start"
 
-cat "$install_dir/nftables-blacklist.conf"
-
 #=================================================
 # END OF SCRIPT
 #=================================================
