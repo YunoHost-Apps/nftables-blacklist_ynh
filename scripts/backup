@@ -24,6 +24,8 @@ ynh_backup "/etc/sudoers.d/$app"
 # NB: /var/log is not backuped during safety-backup-before-upgrades, same as $data_dir
 ynh_backup "/var/log/$app/"
 
+cat "$install_dir/nftables-blacklist.conf"
+
 #=================================================
 # END OF SCRIPT
 #=================================================

@@ -10,8 +10,8 @@ source /usr/share/yunohost/helpers
 # INITIALIZE AND STORE SETTINGS
 #=================================================
 
-ynh_app_setting_set_default --key=use_default_blocklists --value=0
-ynh_app_setting_set_default --key=default_list           --value=""
+ynh_app_setting_set_default --key=use_default_blocklists --value="yes"
+ynh_app_setting_set_default --key=default_list           --value='"https://www.projecthoneypot.org/list_of_ips.php?t=d&rss=1" "http://danger.rulez.sk/projects/bruteforceblocker/blist.php" "https://www.spamhaus.org/drop/drop_v4.json" "https://www.spamhaus.org/drop/drop_v6.json" "https://cinsscore.com/list/ci-badguys.txt" "https://lists.blocklist.de/lists/all.txt" "https://blocklist.greensnow.co/greensnow.txt"  "https://iplists.firehol.org/files/firehol_level1.netset" "https://iplists.firehol.org/files/stopforumspam_7d.ipset" "https://rules.emergingthreats.net/blockrules/compromised-ips.txt"'
 ynh_app_setting_set_default --key=countries_list         --value=""
 ynh_app_setting_set_default --key=asn_list               --value=""
 ynh_app_setting_set_default --key=ips_list               --value=""
@@ -39,8 +39,10 @@ chmod 500 "$install_dir/update-blacklist.sh"
 chmod 600 "$install_dir/nftables-blacklist.conf"
 chown "$app:$app" "$install_dir/nftables-blacklist.conf"
 
-touch "$install_dir/custom_allowlist.txt"
-touch "$install_dir/custom_blocklist.txt"
+echo "# Add custom allow listed IPs below" > "$install_dir/custom_allowlist.txt"
+echo "# Add custom block listed IPs below" > "$install_dir/custom_blocklist.txt"
+chown "$app:$app" "$install_dir/custom_allowlist.txt"
+chown "$app:$app" "$install_dir/custom_blocklist.txt"
 
 mkdir -p "/var/log/$app"
 chown "$app:$app" -R "/var/log/$app"
@@ -70,6 +72,8 @@ ynh_config_add_logrotate
 ynh_script_progression "Starting $app's systemd service..."
 
 ynh_systemctl --service="$app" --action="start"
+
+cat "$install_dir/nftables-blacklist.conf"
 
 #=================================================
 # END OF SCRIPT
