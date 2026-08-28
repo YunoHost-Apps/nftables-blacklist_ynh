@@ -4,7 +4,7 @@ Note that stopping either of the services **does not** disable blocking, you nee
 
 Due to upstream limitations it is impossible to run this app with no blocked IPs, hence `203.0.113.1` was elected as default-blocked. It's reserved by [rfc5737](https://datatracker.ietf.org/doc/html/rfc5737#section-3) for documentation purposes, no one should be using it anyways.
 
-Blanked blocking the whole United States of America (`us`) will brick the app as both inbound and outbound traffic to Github will break.
+**Word of caution***: blanket blocking the whole United States of America (`us`) will brick the app as both inbound and outbound traffic to Github will break.
 
 From upstream docs:
 
