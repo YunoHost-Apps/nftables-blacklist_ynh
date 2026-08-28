@@ -40,7 +40,7 @@ chmod 600 "$install_dir/nftables-blacklist.conf"
 chown "$app:$app" "$install_dir/nftables-blacklist.conf"
 
 echo "# Add custom allow listed IPs below" > "$install_dir/custom_allowlist.txt"
-printf "# Add custom block listed IPs below\n# Prefilled 203.0.113.0 is a reserved IP that matches nothing in real world\n203.0.113.1" > "$install_dir/custom_blocklist.txt"
+printf "# Add custom block listed IPs below\n# Prefilled 203.0.113.1 is a reserved IP that matches nothing in real world\n203.0.113.1" > "$install_dir/custom_blocklist.txt"
 chown "$app:$app" "$install_dir/custom_allowlist.txt"
 chown "$app:$app" "$install_dir/custom_blocklist.txt"
 
