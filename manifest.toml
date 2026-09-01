@@ -7,7 +7,7 @@ name = "nftables blacklist"
 description.en = "A script to ban large numbers of IP addresses published in blocklists, associated with countries or Autonomous Systems (AS)"
 description.fr = "Un script pour bannir de grands nombres d'adresses IP publiées dans des listes de blocage, associées à des pays ou des Systèmes Autonomes (AS)"
 
-version = "2026.08.25~ynh1"
+version = "2026.08.27~ynh1"
 
 maintainers = ["tituspijean"]
 
@@ -35,8 +35,8 @@ ram.runtime = "50M"
     [resources.sources]
 
     [resources.sources.main]
-    url = "https://github.com/trick77/nftables-blacklist/archive/987db647e692b68ccdbf0fb81278e285baa57604.tar.gz"
-    sha256 = "c9f65d2c13d96d5101ff87ab028e4c2e8746e27121a45197865ca4c1e306aa6b"
+    url = "https://github.com/trick77/nftables-blacklist/archive/04a994641f22854310ab55b848490e92d5d4a18d.tar.gz"
+    sha256 = "44e753941fd91bcb1f89fa48ad3667a077b99f09d4364b4024fd9bf5b58b8012"
     autoupdate.strategy = "latest_github_commit"
 
     [resources.system_user]
