@@ -79,8 +79,17 @@ ynh_app_setting_set --key=ips       --value="${ips}"
 ynh_config_add --template="nftables-blacklist.conf" --destination="$install_dir/nftables-blacklist.conf"
 
 # Make sure the custom files exist
-touch "$install_dir/custom_allowlist.txt"
-touch "$install_dir/custom_blocklist.txt"
+if [[ ! -s "$install_dir/custom_allowlist.txt" ]]; then
+    ynh_script_progression "Fixing up allow list..."
+    echo "# Add custom allow listed IPs below" > "$install_dir/custom_allowlist.txt"
+    chown "$app:$app" "$install_dir/custom_allowlist.txt"
+fi
+
+if [[ ! -s "$install_dir/custom_blocklist.txt" ]]; then
+    ynh_script_progression "Fixing up block list..."
+    printf "# Add custom block listed IPs below\n# Prefilled 203.0.113.1 is a reserved IP that matches nothing in real world\n203.0.113.1" > "$install_dir/custom_blocklist.txt"
+    chown "$app:$app" "$install_dir/custom_blocklist.txt"
+fi
 
 ynh_systemctl --service="$app" --action="start"
 
