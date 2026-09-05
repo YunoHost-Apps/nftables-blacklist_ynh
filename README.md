@@ -10,7 +10,7 @@ It shall NOT be edited by hand.
 
 A script to ban large numbers of IP addresses published in blocklists, associated with countries or Autonomous Systems (AS)
 
-[![Version: 2026.05.09~ynh3](https://img.shields.io/badge/Version-2026.05.09~ynh3-rgb(18,138,11)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/nftables-blacklist/)
+[![Version: 2026.08.27~ynh1](https://img.shields.io/badge/Version-2026.08.27~ynh1-rgb(18,138,11)?style=for-the-badge)](https://ci-apps.yunohost.org/ci/apps/nftables-blacklist/)
 
 <div align="center">
 <a href="https://apps.yunohost.org/app/nftables-blacklist"><img height="100px" src="https://github.com/YunoHost/yunohost-artwork/raw/refs/heads/main/badges/neopossum-badges/badge_more_info_on_the_appstore.svg"/></a>
@@ -21,7 +21,7 @@ A script to ban large numbers of IP addresses published in blocklists, associate
 
 [![Automatic tests level](https://apps.yunohost.org/badge/cilevel/nftables-blacklist)](https://ci-apps.yunohost.org/ci/apps/nftables-blacklist/)
 
-🛠️ Upstream nftables blacklist repository: <https://github.com/trick77/nftables-blacklist.git>
+🛠️ Upstream nftables blacklist repository: <https://github.com/trick77/nftables-blacklist>
 
 Pull request are welcome and should target the [`testing` branch](https://github.com/YunoHost-Apps/nftables-blacklist_ynh/tree/testing).
 
