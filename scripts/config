@@ -33,6 +33,8 @@ yunohost_protected_asn=(
     15169
     # GitHub hosts all YunoHost apps
     36459
+    # archive.raspberry.com
+    44684
 )
 
 #=================================================
